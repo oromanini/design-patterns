@@ -2,6 +2,9 @@
 
 require_once 'vendor/autoload.php';
 
+use Curso\DesignPattern\Services\OrderActions\GenerateLogForOrder;
+use Curso\DesignPattern\Services\OrderActions\SendOrderToEmail;
+use Curso\DesignPattern\Services\OrderActions\StoreOrder;
 use Curso\DesignPattern\Services\OrderGeneratorCommand;
 use Curso\DesignPattern\Services\OrderGeneratorHandler;
 
@@ -16,4 +19,7 @@ $command = new OrderGeneratorCommand(
 );
 
 $commandHandler = new OrderGeneratorHandler();
+$commandHandler->addActionAfterOrder(new StoreOrder());
+$commandHandler->addActionAfterOrder(new SendOrderToEmail());
+$commandHandler->addActionAfterOrder(new GenerateLogForOrder());
 $commandHandler->execute($command);

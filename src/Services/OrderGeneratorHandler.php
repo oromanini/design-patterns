@@ -4,12 +4,16 @@ namespace Curso\DesignPattern\Services;
 
 use Curso\DesignPattern\Models\Budget;
 use Curso\DesignPattern\Models\Order;
+use Curso\DesignPattern\Services\OrderActions\GenerateLogForOrder;
+use Curso\DesignPattern\Services\OrderActions\OrderAction;
+use Curso\DesignPattern\Services\OrderActions\SendOrderToEmail;
+use Curso\DesignPattern\Services\OrderActions\StoreOrder;
+use DateTime;
 
 class OrderGeneratorHandler
 {
-    public function __construct()
-    {
-    }
+    /** @var OrderAction[] */
+    private array $actionsAfterOrder = [];
 
     public function execute(OrderGeneratorCommand $orderGeneratorCommand): void
     {
@@ -22,9 +26,13 @@ class OrderGeneratorHandler
         $order->clientName = $orderGeneratorCommand->getClientName();
         $order->budget = $budget;
 
-        //OrderRepository
-        echo "Criar pedido no banco de dados " .PHP_EOL;
-        //MailService
-        echo "Envia e-mail para o cliente " .PHP_EOL;
+        foreach ($this->actionsAfterOrder as $action) {
+            $action->execute($order);
+        }
+    }
+
+    public function addActionAfterOrder(OrderAction $orderAction): void
+    {
+        $this->actionsAfterOrder[] = $orderAction;
     }
 }
