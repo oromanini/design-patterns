@@ -2,11 +2,11 @@
 
 namespace Curso\DesignPattern\Models;
 
-class OrderExtraInfo
+readonly class OrderExtraInfo
 {
     public function __construct(
-        private readonly string    $clientName,
-        private readonly \DateTime $finishDate
+        private string    $clientName,
+        private \DateTime $finishDate
     )
     {}
 
