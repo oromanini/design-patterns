@@ -17,6 +17,9 @@ class DiscountCalculator
             )
         );
 
+        $calculatedDiscount = $chain_of_discounts->calculateDiscount($budget);
+        DiscountLogger::log($calculatedDiscount);
+
         return $chain_of_discounts->calculateDiscount($budget);
     }
 }
