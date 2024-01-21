@@ -4,7 +4,10 @@ namespace Curso\DesignPattern\Models;
 
 class Order
 {
-    public string $clientName;
-    public \DateTime $finishDate;
+    public function __construct(private readonly OrderExtraInfo $extraInfo)
+    {
+    }
+
     public Budget $budget;
+
 }
