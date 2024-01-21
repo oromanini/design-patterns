@@ -4,10 +4,10 @@ namespace Curso\DesignPattern\Models\Taxes;
 
 use Curso\DesignPattern\Models\Budget;
 
-abstract class TaxWithTwoAliquots implements Tax
+abstract class TaxWithTwoAliquots extends Tax
 {
 
-    public function calculateTax(Budget $budget): float
+    public function calculateSpecificTax(Budget $budget): float
     {
         if ($this->shouldApplyMaximumTax($budget)) {
             return $this->calculateMaximumTax($budget);
