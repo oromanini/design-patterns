@@ -9,19 +9,34 @@ use PHPUnit\Framework\TestCase;
 
 class InvoiceTest extends TestCase
 {
-    public function testInvoice(): void
+    private Invoice $invoice;
+
+    protected function setUp(): void
     {
+        parent::setUp();
         $invoiceBuilder = (new ProductInvoiceBuilder());
-        $invoice = $invoiceBuilder->forCompanies('00.00.000/0001-10', 'Oscar SA')
+        $this->invoice = $invoiceBuilder->forCompanies('00.00.000/0001-10', 'Oscar SA')
             ->withItem(new BudgetItem(15))
             ->withItem(new BudgetItem(20))
             ->withItem(new BudgetItem(25))
             ->withObservations('Essa nota fiscal é um teste!')
-            ->withEmissionDate(new \DateTime())
+            ->withEmissionDate(new \DateTime('2023-01-01'))
             ->build();
+    }
 
-        $this->assertInstanceOf(Invoice::class, $invoice);
-        $this->assertEquals(60, $invoice->value());
-        $this->assertEquals(6, $invoice->taxValue);
+    public function testInvoice(): void
+    {
+        $this->assertInstanceOf(Invoice::class, $this->invoice);
+        $this->assertEquals(60, $this->invoice->value());
+        $this->assertEquals(6, $this->invoice->taxValue);
+        $this->assertEquals(new \DateTime('2023-01-01'), $this->invoice->emissionDate);
+    }
+
+    public function testInvoiceClone(): void
+    {
+        $invoice2 = clone $this->invoice;
+        $this->assertEquals(
+            expected: (new \DateTime())->format('d-m-Y'),
+            actual: $invoice2->emissionDate->format('d-m-Y'));
     }
 }

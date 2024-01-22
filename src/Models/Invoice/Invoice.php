@@ -13,12 +13,15 @@ class Invoice
     public \DateTimeInterface $emissionDate;
     public float $taxValue;
 
+    public function __clone(): void
+    {
+        $this->emissionDate = new \DateTimeImmutable();
+    }
+
     public function value(): float
     {
         return array_reduce($this->items, function ($total, BudgetItem $item) {
             return $total + $item->value();
         }, 0);
     }
-
-
 }
